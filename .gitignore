@@ -1,0 +1,4 @@
+downloads/ 
+instance/ 
+*.part 
+__pycache__/ 
