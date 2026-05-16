@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VidDrop Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #060608;
+  --surface: #0f0f14;
+  --card: #16161e;
+  --card2: #1e1e28;
+  --border: #252532;
+  --border2: #32324a;
+  --red: #ff2d55;
+  --orange: #ff6b2b;
+  --green: #00e676;
+  --blue: #2979ff;
+  --text: #eeeef5;
+  --muted: #5a5a80;
+  --muted2: #3a3a55;
+  font-size: 16px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Grid bg ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,45,85,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,45,85,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Glow orbs */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+}
+.orb-1 { width: 700px; height: 700px; background: var(--red); top: -300px; left: -200px; }
+.orb-2 { width: 500px; height: 500px; background: var(--orange); bottom: -200px; right: -100px; }
+
+/* ── Nav ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: rgba(6,6,8,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-logo span {
+  -webkit-text-fill-color: rgba(238,238,245,0.3);
+  font-weight: 400;
+}
+
+.nav-right { display: flex; align-items: center; gap: 0.75rem; }
+
+.nav-user {
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+.btn-sm {
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: 1.5px solid var(--border2);
+  background: transparent;
+  color: var(--muted);
+  transition: all 0.2s;
+}
+.btn-sm:hover { border-color: var(--red); color: var(--text); }
+.btn-sm.primary {
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  border-color: transparent;
+  color: white;
+}
+.btn-sm.primary:hover { opacity: 0.85; }
+
+/* ── Page wrapper ── */
+.page { position: relative; z-index: 1; }
+
+/* ── Auth Page ── */
+#auth-page {
+  min-height: calc(100vh - 65px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.auth-box {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+}
+
+.auth-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+}
+
+.auth-sub {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  letter-spacing: 0.5px;
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+.field label {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+.field input {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.field input:focus { border-color: var(--red); }
+.field input::placeholder { color: var(--muted2); }
+
+.auth-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.auth-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.auth-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+.auth-switch {
+  margin-top: 1.25rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.auth-switch a { color: var(--red); cursor: pointer; text-decoration: none; }
+.auth-switch a:hover { text-decoration: underline; }
+
+.auth-error {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  background: rgba(255,45,85,0.1);
+  border: 1px solid rgba(255,45,85,0.3);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: var(--red);
+  display: none;
+}
+
+/* ── Main App ── */
+#app-page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -2px;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title .grad {
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ── Downloader Card ── */
+.dl-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.section-label {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+
+/* URL Textarea */
+#url-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.82rem;
+  outline: none;
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.7;
+  transition: border-color 0.2s;
+  margin-bottom: 1.25rem;
+}
+#url-input:focus { border-color: var(--red); }
+#url-input::placeholder { color: var(--muted2); }
+
+/* Quality pills */
+.quality-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.q-pill {
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  border: 1.5px solid var(--border2);
+  background: transparent;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.q-pill:hover { border-color: var(--red); color: var(--text); }
+.q-pill.active {
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  border-color: transparent;
+  color: white;
+}
+
+/* Download button */
+.dl-btn {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.dl-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.08));
+}
+.dl-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,45,85,0.3); }
+.dl-btn:active { transform: translateY(0); }
+.dl-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ── Jobs List ── */
+#jobs-container { display: flex; flex-direction: column; gap: 1rem; }
+
+.job-card {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+}
+
+.job-url {
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.job-badge {
+  font-size: 0.65rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.badge-queued   { background: rgba(90,90,128,0.2); color: var(--muted); border: 1px solid var(--border2); }
+.badge-downloading { background: rgba(41,121,255,0.15); color: #5b9fff; border: 1px solid rgba(41,121,255,0.3); }
+.badge-done     { background: rgba(0,230,118,0.1); color: var(--green); border: 1px solid rgba(0,230,118,0.3); }
+.badge-error    { background: rgba(255,45,85,0.1); color: var(--red); border: 1px solid rgba(255,45,85,0.3); }
+
+.job-title {
+  font-size: 0.82rem;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Progress bar */
+.prog-wrap { margin-bottom: 0.5rem; }
+
+.prog-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+
+.prog-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.prog-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--red), var(--orange));
+  transition: width 0.4s ease;
+  min-width: 2px;
+}
+
+.prog-fill.indeterminate {
+  animation: slide 1.4s ease infinite;
+  width: 40% !important;
+}
+
+@keyframes slide {
+  0%   { margin-left: -40%; }
+  100% { margin-left: 140%; }
+}
+
+.dl-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  padding: 0.5rem 1.1rem;
+  background: rgba(0,230,118,0.1);
+  border: 1px solid rgba(0,230,118,0.3);
+  border-radius: 8px;
+  color: var(--green);
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+.dl-link:hover { background: rgba(0,230,118,0.18); }
+
+.job-error {
+  font-size: 0.75rem;
+  color: var(--red);
+  margin-top: 0.4rem;
+}
+
+/* ── Supported sites ── */
+.sites-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 2.5rem;
+}
+
+.site-chip {
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 500px) {
+  nav { padding: 1rem 1.25rem; }
+  .dl-card { padding: 1.25rem; }
+  #app-page { padding: 2rem 1rem 4rem; }
+}
+</style>
+</head>
+<body>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">VidDrop<span>PRO</span></div>
+  <div class="nav-right">
+    <span class="nav-user" id="nav-username"></span>
+    <button class="btn-sm" id="nav-auth-btn" onclick="showAuth()">Sign In</button>
+    <button class="btn-sm" id="nav-logout-btn" onclick="doLogout()" style="display:none">Logout</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- AUTH PAGE -->
+  <div id="auth-page">
+    <div class="auth-box">
+      <!-- Login Form -->
+      <div id="login-form">
+        <div class="auth-title">Welcome back.</div>
+        <div class="auth-sub">Sign in to start downloading</div>
+        <div class="field">
+          <label>Username or Email</label>
+          <input type="text" id="login-id" placeholder="your_username"/>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+        </div>
+        <div class="auth-error" id="login-err"></div>
+        <button class="auth-btn" onclick="doLogin()" id="login-btn">SIGN IN</button>
+        <div class="auth-switch">Don't have an account? <a onclick="toggleAuth('register')">Create one</a></div>
+      </div>
+
+      <!-- Register Form -->
+      <div id="register-form" style="display:none">
+        <div class="auth-title">Join VidDrop.</div>
+        <div class="auth-sub">Create your free account</div>
+        <div class="field">
+          <label>Username</label>
+          <input type="text" id="reg-username" placeholder="cool_username"/>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="reg-email" placeholder="you@email.com"/>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="reg-pass" placeholder="Min. 6 characters" onkeydown="if(event.key==='Enter')doRegister()"/>
+        </div>
+        <div class="auth-error" id="reg-err"></div>
+        <button class="auth-btn" onclick="doRegister()" id="reg-btn">CREATE ACCOUNT</button>
+        <div class="auth-switch">Already have an account? <a onclick="toggleAuth('login')">Sign in</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP PAGE -->
+  <div id="app-page" style="display:none">
+    <div class="hero">
+      <div class="hero-title">
+        Download<br/><span class="grad">Anything.</span>
+      </div>
+      <div class="hero-sub">Paste links · Choose quality · Save instantly</div>
+    </div>
+
+    <div class="dl-card">
+      <div class="section-label">Video URLs — paste one or multiple links</div>
+      <textarea id="url-input" placeholder="https://youtube.com/watch?v=...&#10;https://tiktok.com/@user/video/...&#10;https://instagram.com/reel/..."></textarea>
+
+      <div class="section-label">Quality</div>
+      <div class="quality-row">
+        <button class="q-pill active" data-q="best">Best</button>
+        <button class="q-pill" data-q="1080p">1080p</button>
+        <button class="q-pill" data-q="720p">720p</button>
+        <button class="q-pill" data-q="480p">480p</button>
+        <button class="q-pill" data-q="audio">Audio Only</button>
+      </div>
+
+      <button class="dl-btn" id="dl-btn" onclick="startDownload()">⬇ DOWNLOAD</button>
+    </div>
+
+    <!-- Jobs -->
+    <div id="jobs-container"></div>
+
+    <!-- Supported sites -->
+    <div class="sites-row">
+      <span class="site-chip">YouTube</span>
+      <span class="site-chip">TikTok</span>
+      <span class="site-chip">Instagram</span>
+      <span class="site-chip">Twitter / X</span>
+      <span class="site-chip">Facebook</span>
+      <span class="site-chip">Vimeo</span>
+      <span class="site-chip">Reddit</span>
+      <span class="site-chip">Dailymotion</span>
+      <span class="site-chip">Twitch</span>
+      <span class="site-chip">SoundCloud</span>
+      <span class="site-chip">1000+ more</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+let selectedQuality = 'best';
+let activePolls = {};
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+(async () => {
+  const res = await fetch('/api/me');
+  const data = await res.json();
+  if (data.logged_in) showApp(data.username);
+  else showAuth();
+})();
+
+// ── Auth UI ───────────────────────────────────────────────────────────────────
+function showAuth() {
+  document.getElementById('auth-page').style.display = 'flex';
+  document.getElementById('app-page').style.display = 'none';
+  document.getElementById('nav-auth-btn').style.display = '';
+  document.getElementById('nav-logout-btn').style.display = 'none';
+  document.getElementById('nav-username').textContent = '';
+}
+
+function showApp(username) {
+  document.getElementById('auth-page').style.display = 'none';
+  document.getElementById('app-page').style.display = 'block';
+  document.getElementById('nav-auth-btn').style.display = 'none';
+  document.getElementById('nav-logout-btn').style.display = '';
+  document.getElementById('nav-username').textContent = username;
+}
+
+function toggleAuth(mode) {
+  document.getElementById('login-form').style.display = mode === 'login' ? 'block' : 'none';
+  document.getElementById('register-form').style.display = mode === 'register' ? 'block' : 'none';
+  document.getElementById('login-err').style.display = 'none';
+  document.getElementById('reg-err').style.display = 'none';
+}
+
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+async function doLogin() {
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true; btn.textContent = 'SIGNING IN...';
+  const res = await fetch('/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      identifier: document.getElementById('login-id').value,
+      password: document.getElementById('login-pass').value
+    })
+  });
+  const data = await res.json();
+  btn.disabled = false; btn.textContent = 'SIGN IN';
+  if (res.ok) showApp(data.username);
+  else showError('login-err', data.error);
+}
+
+async function doRegister() {
+  const btn = document.getElementById('reg-btn');
+  btn.disabled = true; btn.textContent = 'CREATING...';
+  const res = await fetch('/api/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      username: document.getElementById('reg-username').value,
+      email: document.getElementById('reg-email').value,
+      password: document.getElementById('reg-pass').value
+    })
+  });
+  const data = await res.json();
+  btn.disabled = false; btn.textContent = 'CREATE ACCOUNT';
+  if (res.ok) showApp(data.username);
+  else showError('reg-err', data.error);
+}
+
+async function doLogout() {
+  await fetch('/api/logout', { method: 'POST' });
+  showAuth();
+  document.getElementById('jobs-container').innerHTML = '';
+}
+
+// ── Quality pills ─────────────────────────────────────────────────────────────
+document.querySelectorAll('.q-pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.q-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedQuality = btn.dataset.q;
+  });
+});
+
+// ── Download ──────────────────────────────────────────────────────────────────
+async function startDownload() {
+  const raw = document.getElementById('url-input').value.trim();
+  if (!raw) { alert('Paste at least one video URL!'); return; }
+
+  const urls = raw.split('\n').map(u => u.trim()).filter(Boolean);
+  const btn = document.getElementById('dl-btn');
+  btn.disabled = true; btn.textContent = '⏳ STARTING...';
+
+  try {
+    const res = await fetch('/api/download', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ urls, quality: selectedQuality })
+    });
+    const data = await res.json();
+    if (data.job_ids) {
+      document.getElementById('url-input').value = '';
+      data.job_ids.forEach((id, i) => {
+        createJobCard(id, urls[i]);
+        pollJob(id);
+      });
+    } else {
+      alert(data.error || 'Something went wrong');
+    }
+  } catch(e) {
+    alert('Network error. Is the server running?');
+  }
+  btn.disabled = false; btn.textContent = '⬇ DOWNLOAD';
+}
+
+// ── Job Card ──────────────────────────────────────────────────────────────────
+function createJobCard(jobId, url) {
+  const container = document.getElementById('jobs-container');
+  const card = document.createElement('div');
+  card.className = 'job-card';
+  card.id = `job-${jobId}`;
+  card.innerHTML = `
+    <div class="job-header">
+      <div class="job-url">${url}</div>
+      <div class="job-badge badge-queued" id="badge-${jobId}">QUEUED</div>
+    </div>
+    <div class="job-title" id="title-${jobId}">Fetching info...</div>
+    <div class="prog-wrap">
+      <div class="prog-meta">
+        <span id="speed-${jobId}"></span>
+        <span id="eta-${jobId}"></span>
+        <span id="pct-${jobId}">0%</span>
+      </div>
+      <div class="prog-bar">
+        <div class="prog-fill indeterminate" id="fill-${jobId}" style="width:0%"></div>
+      </div>
+    </div>
+    <div id="action-${jobId}"></div>
+  `;
+  container.prepend(card);
+}
+
+function pollJob(jobId) {
+  if (activePolls[jobId]) clearInterval(activePolls[jobId]);
+  activePolls[jobId] = setInterval(async () => {
+    try {
+      const res = await fetch(`/api/status/${jobId}`);
+      const d = await res.json();
+      updateJobCard(jobId, d);
+      if (d.status === 'done' || d.status === 'error') {
+        clearInterval(activePolls[jobId]);
+        delete activePolls[jobId];
+      }
+    } catch(e) {}
+  }, 1000);
+}
+
+function updateJobCard(jobId, d) {
+  const badge = document.getElementById(`badge-${jobId}`);
+  const fill  = document.getElementById(`fill-${jobId}`);
+  const pct   = document.getElementById(`pct-${jobId}`);
+  const speed = document.getElementById(`speed-${jobId}`);
+  const eta   = document.getElementById(`eta-${jobId}`);
+  const title = document.getElementById(`title-${jobId}`);
+  const action= document.getElementById(`action-${jobId}`);
+
+  if (d.status === 'downloading') {
+    badge.className = 'job-badge badge-downloading'; badge.textContent = 'DOWNLOADING';
+    fill.classList.remove('indeterminate');
+    fill.style.width = (d.percent || 0) + '%';
+    pct.textContent = (d.percent || 0) + '%';
+    speed.textContent = d.speed || '';
+    eta.textContent = d.eta ? `ETA ${d.eta}` : '';
+
+  } else if (d.status === 'done') {
+    badge.className = 'job-badge badge-done'; badge.textContent = 'DONE';
+    fill.classList.remove('indeterminate');
+    fill.style.width = '100%';
+    pct.textContent = '100%';
+    speed.textContent = ''; eta.textContent = '';
+    title.textContent = d.title || 'Video ready';
+    action.innerHTML = `<a class="dl-link" href="/api/file/${jobId}" download="${d.filename}">⬇ Save — ${d.filename}</a>`;
+
+  } else if (d.status === 'error') {
+    badge.className = 'job-badge badge-error'; badge.textContent = 'ERROR';
+    fill.classList.remove('indeterminate');
+    fill.style.width = '0%';
+    action.innerHTML = `<div class="job-error">✗ ${d.message}</div>`;
+
+  } else if (d.status === 'queued') {
+    badge.className = 'job-badge badge-queued'; badge.textContent = 'QUEUED';
+  }
+}
+</script>
+</body>
+</html>
