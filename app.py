@@ -74,7 +74,7 @@ def do_download(job_id, url, quality):
             jobs[job_id].update({"percent": percent, "speed": speed, "eta": eta_str})
 
     # Use cookies if available
-    cookies_file = "cookies.txt"
+    cookies_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cookies.txt")
     
     ydl_opts = {
         "format": FORMAT_MAP.get(quality, FORMAT_MAP["best"]),
