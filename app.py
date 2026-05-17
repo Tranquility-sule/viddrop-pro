@@ -73,6 +73,9 @@ def do_download(job_id, url, quality):
             eta_str = f"{int(eta)}s" if eta else ""
             jobs[job_id].update({"percent": percent, "speed": speed, "eta": eta_str})
 
+    # Use cookies if available
+    cookies_file = "cookies.txt"
+    
     ydl_opts = {
         "format": FORMAT_MAP.get(quality, FORMAT_MAP["best"]),
         "outtmpl": output_path,
@@ -86,6 +89,7 @@ def do_download(job_id, url, quality):
         "socket_timeout": 30,
         "http_chunk_size": 10485760,
         "concurrent_fragment_downloads": 4,
+        "cookiefile": cookies_file if os.path.exists(cookies_file) else None,
     }
 
     try:
