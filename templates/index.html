@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>VidDrop Pro</title>
+<title>State of Tranquility — Video Downloader</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -492,7 +492,25 @@ nav {
 
 <!-- Nav -->
 <nav>
-  <div class="nav-logo">VidDrop<span>PRO</span></div>
+  <div class="nav-logo">
+    <svg height="36" viewBox="0 0 260 36" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ng" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#ff2d55"/>
+          <stop offset="100%" style="stop-color:#ff6b2b"/>
+        </linearGradient>
+      </defs>
+      <!-- Hex icon -->
+      <polygon points="14,4 24,4 30,14 24,24 14,24 8,14" fill="url(#ng)" opacity="0.15" stroke="url(#ng)" stroke-width="1"/>
+      <polygon points="15,6 23,6 28,14 23,22 15,22 10,14" fill="url(#ng)"/>
+      <line x1="19" y1="9" x2="19" y2="17" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+      <polyline points="15,14 19,18 23,14" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="14" y1="19" x2="24" y2="19" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+      <!-- Text -->
+      <text x="36" y="12" font-family="'Syne',sans-serif" font-size="7.5" font-weight="700" fill="#ff2d55" letter-spacing="3" opacity="0.8">STATE OF</text>
+      <text x="36" y="26" font-family="'Syne',sans-serif" font-size="13" font-weight="800" fill="url(#ng)" letter-spacing="1">TRANQUILITY</text>
+    </svg>
+  </div>
   <div class="nav-right">
     <span class="nav-user" id="nav-username"></span>
     <button class="btn-sm" id="nav-auth-btn" onclick="showAuth()">Sign In</button>
@@ -551,7 +569,7 @@ nav {
       <div class="hero-title">
         Download<br/><span class="grad">Anything.</span>
       </div>
-      <div class="hero-sub">Paste links · Choose quality · Save instantly</div>
+      <div class="hero-sub">State of Tranquility · Paste links · Choose quality · Save instantly</div>
     </div>
 
     <div class="dl-card">
