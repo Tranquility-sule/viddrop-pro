@@ -50,10 +50,10 @@ def cleanup_file(filepath, delay=600):
     threading.Thread(target=_delete, daemon=True).start()
 
 FORMAT_MAP = {
-    "best":  "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
-    "1080p": "bestvideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/best[height<=1080][ext=mp4]/best",
-    "720p":  "bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[height<=720][ext=mp4]/best",
-    "480p":  "bestvideo[height<=480][ext=mp4]+bestaudio[ext=m4a]/best[height<=480][ext=mp4]/best",
+    "best":  "best[ext=mp4]/best",
+    "1080p": "best[height<=1080][ext=mp4]/best[height<=1080]/best",
+    "720p":  "best[height<=720][ext=mp4]/best[height<=720]/best",
+    "480p":  "best[height<=480][ext=mp4]/best[height<=480]/best",
     "audio": "bestaudio[ext=m4a]/bestaudio",
 }
 
