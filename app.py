@@ -6,13 +6,14 @@ import os
 import uuid
 import threading
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import wraps
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = os.environ.get("SECRET_KEY", "change-this-in-production-please")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///viddrop.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=30)
 
 db = SQLAlchemy(app)
 DOWNLOAD_DIR = "downloads"
@@ -147,6 +148,8 @@ def login():
     ).first()
     if not user or not check_password_hash(user.password, password):
         return jsonify({"error": "Invalid username or password"}), 401
+    remember = data.get("remember", False)
+    session.permanent = remember
     session["user_id"] = user.id
     session["username"] = user.username
     return jsonify({"message": "Welcome back!", "username": user.username})

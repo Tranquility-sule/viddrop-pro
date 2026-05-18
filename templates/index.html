@@ -535,6 +535,10 @@ nav {
           <label>Password</label>
           <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
         </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+          <input type="checkbox" id="remember-me" style="accent-color:var(--red);width:15px;height:15px;cursor:pointer;"/>
+          <label for="remember-me" style="font-size:0.78rem;color:var(--muted);cursor:pointer;letter-spacing:1px;">Remember me for 30 days</label>
+        </div>
         <div class="auth-error" id="login-err"></div>
         <button class="auth-btn" onclick="doLogin()" id="login-btn">SIGN IN</button>
         <div class="auth-switch">Don't have an account? <a onclick="toggleAuth('register')">Create one</a></div>
@@ -660,7 +664,8 @@ async function doLogin() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       identifier: document.getElementById('login-id').value,
-      password: document.getElementById('login-pass').value
+      password: document.getElementById('login-pass').value,
+      remember: document.getElementById('remember-me').checked
     })
   });
   const data = await res.json();
