@@ -30,6 +30,15 @@ class User(db.Model):
     password = db.Column(db.String(200), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+class DownloadHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    title = db.Column(db.String(500), nullable=False)
+    url = db.Column(db.String(1000), nullable=False)
+    quality = db.Column(db.String(20), nullable=False)
+    filename = db.Column(db.String(500), nullable=False)
+    downloaded_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 with app.app_context():
     db.create_all()
 
@@ -62,6 +71,7 @@ def do_download(job_id, url, quality):
     jobs[job_id].update({"status": "downloading", "speed": "", "eta": "", "percent": 0})
     ext = "m4a" if quality == "audio" else "mp4"
     output_path = os.path.join(DOWNLOAD_DIR, f"{job_id}.%(ext)s")
+    cookies_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cookies.txt")
 
     def progress_hook(d):
         if d["status"] == "downloading":
@@ -74,9 +84,6 @@ def do_download(job_id, url, quality):
             eta_str = f"{int(eta)}s" if eta else ""
             jobs[job_id].update({"percent": percent, "speed": speed, "eta": eta_str})
 
-    # Use cookies if available
-    cookies_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cookies.txt")
-    
     ydl_opts = {
         "format": FORMAT_MAP.get(quality, FORMAT_MAP["best"]),
         "outtmpl": output_path,
@@ -86,10 +93,7 @@ def do_download(job_id, url, quality):
         "progress_hooks": [progress_hook],
         "retries": 10,
         "fragment_retries": 10,
-        "retry_sleep_functions": {"http": lambda n: 2 ** n},
         "socket_timeout": 30,
-        "http_chunk_size": 10485760,
-        "concurrent_fragment_downloads": 4,
         "cookiefile": cookies_file if os.path.exists(cookies_file) else None,
     }
 
@@ -112,6 +116,21 @@ def do_download(job_id, url, quality):
                 "title": title, "speed": "", "eta": ""
             })
             cleanup_file(final_path)
+
+            # Save to history
+            user_id = jobs[job_id].get("user_id")
+            if user_id:
+                with app.app_context():
+                    history = DownloadHistory(
+                        user_id=user_id,
+                        title=title,
+                        url=url,
+                        quality=quality,
+                        filename=f"{title}.{ext}"
+                    )
+                    db.session.add(history)
+                    db.session.commit()
+
     except Exception as e:
         jobs[job_id].update({"status": "error", "message": str(e)})
 
@@ -136,23 +155,23 @@ def register():
     db.session.commit()
     session["user_id"] = user.id
     session["username"] = user.username
-    return jsonify({"message": "Account created!", "username": user.username})
+    return jsonify({"message": "Account created!", "username": user.username, "is_admin": user.id == 1})
 
 @app.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json()
     identifier = data.get("identifier", "").strip()
     password = data.get("password", "")
+    remember = data.get("remember", False)
     user = User.query.filter(
         (User.username == identifier) | (User.email == identifier)
     ).first()
     if not user or not check_password_hash(user.password, password):
         return jsonify({"error": "Invalid username or password"}), 401
-    remember = data.get("remember", False)
     session.permanent = remember
     session["user_id"] = user.id
     session["username"] = user.username
-    return jsonify({"message": "Welcome back!", "username": user.username})
+    return jsonify({"message": "Welcome back!", "username": user.username, "is_admin": user.id == 1})
 
 @app.route("/api/logout", methods=["POST"])
 def logout():
@@ -162,7 +181,7 @@ def logout():
 @app.route("/api/me")
 def me():
     if "user_id" in session:
-        return jsonify({"logged_in": True, "username": session["username"]})
+        return jsonify({"logged_in": True, "username": session["username"], "is_admin": session["user_id"] == 1})
     return jsonify({"logged_in": False})
 
 # ── Download Routes ───────────────────────────────────────────────────────────
@@ -181,7 +200,7 @@ def start_download():
         if not url:
             continue
         job_id = str(uuid.uuid4())
-        jobs[job_id] = {"status": "queued", "url": url, "percent": 0, "speed": "", "eta": ""}
+        jobs[job_id] = {"status": "queued", "url": url, "percent": 0, "speed": "", "eta": "", "user_id": session.get("user_id"), "quality": quality}
         t = threading.Thread(target=do_download, args=(job_id, url, quality), daemon=True)
         t.start()
         job_ids.append(job_id)
@@ -206,6 +225,48 @@ def serve_file(job_id):
     if not os.path.exists(filepath):
         return "File expired", 410
     return send_file(filepath, as_attachment=True, download_name=filename)
+
+# ── History Routes ────────────────────────────────────────────────────────────
+
+@app.route("/api/history")
+@login_required
+def get_history():
+    user_id = session["user_id"]
+    records = DownloadHistory.query.filter_by(user_id=user_id).order_by(DownloadHistory.downloaded_at.desc()).limit(50).all()
+    return jsonify([{
+        "id": r.id,
+        "title": r.title,
+        "url": r.url,
+        "quality": r.quality,
+        "filename": r.filename,
+        "downloaded_at": r.downloaded_at.strftime("%b %d, %Y %I:%M %p")
+    } for r in records])
+
+@app.route("/api/history/<int:record_id>", methods=["DELETE"])
+@login_required
+def delete_history(record_id):
+    record = DownloadHistory.query.filter_by(id=record_id, user_id=session["user_id"]).first()
+    if not record:
+        return jsonify({"error": "Not found"}), 404
+    db.session.delete(record)
+    db.session.commit()
+    return jsonify({"message": "Deleted"})
+
+# ── Admin Routes ──────────────────────────────────────────────────────────────
+
+@app.route("/api/admin/update-cookies", methods=["POST"])
+@login_required
+def update_cookies():
+    if session["user_id"] != 1:
+        return jsonify({"error": "Admin only"}), 403
+    if "cookies" not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
+    file = request.files["cookies"]
+    if file.filename == "":
+        return jsonify({"error": "No file selected"}), 400
+    cookies_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cookies.txt")
+    file.save(cookies_path)
+    return jsonify({"message": "Cookies updated! YouTube downloads should work now."})
 
 # ── Serve Frontend ────────────────────────────────────────────────────────────
 

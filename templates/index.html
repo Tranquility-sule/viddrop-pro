@@ -22,7 +22,6 @@
   --text: #eeeef5;
   --muted: #5a5a80;
   --muted2: #3a3a55;
-  font-size: 16px;
 }
 
 body {
@@ -33,7 +32,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ── Grid bg ── */
 body::before {
   content: '';
   position: fixed;
@@ -46,439 +44,252 @@ body::before {
   z-index: 0;
 }
 
-/* Glow orbs */
-.orb {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(140px);
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.12;
-}
+.orb { position: fixed; border-radius: 50%; filter: blur(140px); pointer-events: none; z-index: 0; opacity: 0.12; }
 .orb-1 { width: 700px; height: 700px; background: var(--red); top: -300px; left: -200px; }
 .orb-2 { width: 500px; height: 500px; background: var(--orange); bottom: -200px; right: -100px; }
 
 /* ── Nav ── */
 nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
   padding: 1rem 2.5rem;
   background: rgba(6,6,8,0.85);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
 }
 
-.nav-logo {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1.4rem;
-  letter-spacing: -1px;
-  background: linear-gradient(135deg, var(--red), var(--orange));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.nav-logo span {
-  -webkit-text-fill-color: rgba(238,238,245,0.3);
-  font-weight: 400;
-}
-
+.nav-logo { display: flex; align-items: center; }
 .nav-right { display: flex; align-items: center; gap: 0.75rem; }
-
-.nav-user {
-  font-size: 0.75rem;
-  color: var(--muted);
-  letter-spacing: 1px;
-}
+.nav-user { font-size: 0.75rem; color: var(--muted); letter-spacing: 1px; }
 
 .btn-sm {
-  padding: 0.45rem 1rem;
-  border-radius: 8px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 1px;
-  cursor: pointer;
-  border: 1.5px solid var(--border2);
-  background: transparent;
-  color: var(--muted);
+  padding: 0.45rem 1rem; border-radius: 8px;
+  font-family: 'DM Mono', monospace; font-size: 0.75rem; font-weight: 500;
+  letter-spacing: 1px; cursor: pointer;
+  border: 1.5px solid var(--border2); background: transparent; color: var(--muted);
   transition: all 0.2s;
 }
 .btn-sm:hover { border-color: var(--red); color: var(--text); }
-.btn-sm.primary {
-  background: linear-gradient(135deg, var(--red), var(--orange));
-  border-color: transparent;
-  color: white;
-}
-.btn-sm.primary:hover { opacity: 0.85; }
+.btn-sm.primary { background: linear-gradient(135deg, var(--red), var(--orange)); border-color: transparent; color: white; }
 
-/* ── Page wrapper ── */
+.admin-btn {
+  background: transparent; border: 1.5px solid var(--border2); border-radius: 8px;
+  color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.7rem;
+  padding: 0.3rem 0.7rem; cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
+}
+.admin-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+/* ── Page ── */
 .page { position: relative; z-index: 1; }
 
-/* ── Auth Page ── */
+/* ── Auth ── */
 #auth-page {
   min-height: calc(100vh - 65px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1rem;
+  display: flex; align-items: center; justify-content: center; padding: 2rem 1rem;
 }
 
 .auth-box {
-  width: 100%;
-  max-width: 420px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 2.5rem;
+  width: 100%; max-width: 420px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 20px; padding: 2.5rem;
   box-shadow: 0 40px 100px rgba(0,0,0,0.6);
 }
 
-.auth-title {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.6rem;
-  font-weight: 800;
-  margin-bottom: 0.3rem;
-}
+.auth-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; margin-bottom: 0.3rem; }
+.auth-sub { font-size: 0.78rem; color: var(--muted); margin-bottom: 2rem; letter-spacing: 0.5px; }
 
-.auth-sub {
-  font-size: 0.78rem;
-  color: var(--muted);
-  margin-bottom: 2rem;
-  letter-spacing: 0.5px;
-}
-
-.field {
-  margin-bottom: 1rem;
-}
-
-.field label {
-  display: block;
-  font-size: 0.68rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 0.4rem;
-}
-
+.field { margin-bottom: 1rem; }
+.field label { display: block; font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
 .field input {
-  width: 100%;
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  padding: 0.75rem 1rem;
-  color: var(--text);
-  font-family: 'DM Mono', monospace;
-  font-size: 0.85rem;
-  outline: none;
-  transition: border-color 0.2s;
+  width: 100%; background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 0.75rem 1rem; color: var(--text);
+  font-family: 'DM Mono', monospace; font-size: 0.85rem; outline: none; transition: border-color 0.2s;
 }
 .field input:focus { border-color: var(--red); }
 .field input::placeholder { color: var(--muted2); }
 
+.remember-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+.remember-row input[type="checkbox"] { accent-color: var(--red); width: 15px; height: 15px; cursor: pointer; }
+.remember-row label { font-size: 0.78rem; color: var(--muted); cursor: pointer; letter-spacing: 1px; }
+
 .auth-btn {
-  width: 100%;
-  margin-top: 0.5rem;
-  padding: 0.85rem;
+  width: 100%; margin-top: 0.25rem; padding: 0.85rem;
   background: linear-gradient(135deg, var(--red), var(--orange));
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-family: 'Syne', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.15s;
+  border: none; border-radius: 12px; color: white;
+  font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+  letter-spacing: 2px; cursor: pointer; transition: opacity 0.2s, transform 0.15s;
 }
 .auth-btn:hover { opacity: 0.88; transform: translateY(-1px); }
 .auth-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
-.auth-switch {
-  margin-top: 1.25rem;
-  text-align: center;
-  font-size: 0.78rem;
-  color: var(--muted);
-}
+.auth-switch { margin-top: 1.25rem; text-align: center; font-size: 0.78rem; color: var(--muted); }
 .auth-switch a { color: var(--red); cursor: pointer; text-decoration: none; }
 .auth-switch a:hover { text-decoration: underline; }
 
 .auth-error {
-  margin-top: 0.75rem;
-  padding: 0.65rem 0.9rem;
-  background: rgba(255,45,85,0.1);
-  border: 1px solid rgba(255,45,85,0.3);
-  border-radius: 8px;
-  font-size: 0.78rem;
-  color: var(--red);
-  display: none;
+  margin-top: 0.75rem; padding: 0.65rem 0.9rem;
+  background: rgba(255,45,85,0.1); border: 1px solid rgba(255,45,85,0.3);
+  border-radius: 8px; font-size: 0.78rem; color: var(--red); display: none;
 }
 
-/* ── Main App ── */
-#app-page {
-  max-width: 780px;
-  margin: 0 auto;
-  padding: 3rem 1.5rem 5rem;
-}
+/* ── App ── */
+#app-page { max-width: 780px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
 
-.hero {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
+.hero { text-align: center; margin-bottom: 3rem; }
 .hero-title {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -2px;
-  margin-bottom: 0.75rem;
+  font-family: 'Syne', sans-serif; font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 800; line-height: 1; letter-spacing: -2px; margin-bottom: 0.75rem;
 }
-
 .hero-title .grad {
   background: linear-gradient(135deg, var(--red), var(--orange));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
+.hero-sub { color: var(--muted); font-size: 0.82rem; letter-spacing: 2px; text-transform: uppercase; }
 
-.hero-sub {
-  color: var(--muted);
-  font-size: 0.82rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+/* ── Tabs ── */
+.tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+.tab {
+  padding: 0.5rem 1.2rem; border-radius: 10px;
+  border: 1.5px solid var(--border2); background: transparent;
+  color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: 0.75rem; letter-spacing: 1px; cursor: pointer; transition: all 0.2s;
 }
+.tab:hover { border-color: var(--red); color: var(--text); }
+.tab.active { background: linear-gradient(135deg, var(--red), var(--orange)); border-color: transparent; color: white; }
 
 /* ── Downloader Card ── */
 .dl-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 2rem;
-  margin-bottom: 1.5rem;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 20px; padding: 2rem; margin-bottom: 1.5rem;
   box-shadow: 0 20px 60px rgba(0,0,0,0.4);
 }
 
-.section-label {
-  font-size: 0.65rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 0.6rem;
-}
+.section-label { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
 
-/* URL Textarea */
 #url-input {
-  width: 100%;
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 12px;
-  padding: 0.9rem 1.1rem;
-  color: var(--text);
-  font-family: 'DM Mono', monospace;
-  font-size: 0.82rem;
-  outline: none;
-  resize: vertical;
-  min-height: 90px;
-  line-height: 1.7;
-  transition: border-color 0.2s;
-  margin-bottom: 1.25rem;
+  width: 100%; background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 0.9rem 1.1rem; color: var(--text);
+  font-family: 'DM Mono', monospace; font-size: 0.82rem; outline: none;
+  resize: vertical; min-height: 90px; line-height: 1.7;
+  transition: border-color 0.2s; margin-bottom: 1.25rem;
 }
 #url-input:focus { border-color: var(--red); }
 #url-input::placeholder { color: var(--muted2); }
 
-/* Quality pills */
-.quality-row {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-}
-
+.quality-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
 .q-pill {
-  padding: 0.4rem 0.9rem;
-  border-radius: 20px;
-  border: 1.5px solid var(--border2);
-  background: transparent;
-  color: var(--muted);
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.18s;
+  padding: 0.4rem 0.9rem; border-radius: 20px; border: 1.5px solid var(--border2);
+  background: transparent; color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: 0.72rem; letter-spacing: 1px; cursor: pointer; transition: all 0.18s;
 }
 .q-pill:hover { border-color: var(--red); color: var(--text); }
-.q-pill.active {
-  background: linear-gradient(135deg, var(--red), var(--orange));
-  border-color: transparent;
-  color: white;
-}
+.q-pill.active { background: linear-gradient(135deg, var(--red), var(--orange)); border-color: transparent; color: white; }
 
-/* Download button */
 .dl-btn {
-  width: 100%;
-  padding: 1rem;
+  width: 100%; padding: 1rem;
   background: linear-gradient(135deg, var(--red), var(--orange));
-  border: none;
-  border-radius: 14px;
-  color: white;
-  font-family: 'Syne', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 3px;
-  cursor: pointer;
-  transition: all 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-.dl-btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.08));
+  border: none; border-radius: 14px; color: white;
+  font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700;
+  letter-spacing: 3px; cursor: pointer; transition: all 0.2s;
 }
 .dl-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,45,85,0.3); }
-.dl-btn:active { transform: translateY(0); }
 .dl-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
-/* ── Jobs List ── */
+/* ── Job Cards ── */
 #jobs-container { display: flex; flex-direction: column; gap: 1rem; }
 
 .job-card {
-  background: var(--card2);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.25rem 1.5rem;
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.25rem 1.5rem;
   animation: slideIn 0.3s ease;
 }
+@keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.job-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-  gap: 1rem;
-}
-
-.job-url {
-  font-size: 0.72rem;
-  color: var(--muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1;
-}
-
-.job-badge {
-  font-size: 0.65rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: 20px;
-  letter-spacing: 1px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.badge-queued   { background: rgba(90,90,128,0.2); color: var(--muted); border: 1px solid var(--border2); }
+.job-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; gap: 1rem; }
+.job-url { font-size: 0.72rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+.job-badge { font-size: 0.65rem; padding: 0.2rem 0.6rem; border-radius: 20px; letter-spacing: 1px; white-space: nowrap; flex-shrink: 0; }
+.badge-queued { background: rgba(90,90,128,0.2); color: var(--muted); border: 1px solid var(--border2); }
 .badge-downloading { background: rgba(41,121,255,0.15); color: #5b9fff; border: 1px solid rgba(41,121,255,0.3); }
-.badge-done     { background: rgba(0,230,118,0.1); color: var(--green); border: 1px solid rgba(0,230,118,0.3); }
-.badge-error    { background: rgba(255,45,85,0.1); color: var(--red); border: 1px solid rgba(255,45,85,0.3); }
+.badge-done { background: rgba(0,230,118,0.1); color: var(--green); border: 1px solid rgba(0,230,118,0.3); }
+.badge-error { background: rgba(255,45,85,0.1); color: var(--red); border: 1px solid rgba(255,45,85,0.3); }
 
-.job-title {
-  font-size: 0.82rem;
-  color: var(--text);
-  margin-bottom: 0.6rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.job-title { font-size: 0.82rem; color: var(--text); margin-bottom: 0.6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* Progress bar */
 .prog-wrap { margin-bottom: 0.5rem; }
-
-.prog-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.65rem;
-  color: var(--muted);
-  margin-bottom: 0.3rem;
-}
-
-.prog-bar {
-  height: 3px;
-  background: var(--border);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.prog-fill {
-  height: 100%;
-  border-radius: 3px;
-  background: linear-gradient(90deg, var(--red), var(--orange));
-  transition: width 0.4s ease;
-  min-width: 2px;
-}
-
-.prog-fill.indeterminate {
-  animation: slide 1.4s ease infinite;
-  width: 40% !important;
-}
-
-@keyframes slide {
-  0%   { margin-left: -40%; }
-  100% { margin-left: 140%; }
-}
+.prog-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--muted); margin-bottom: 0.3rem; }
+.prog-bar { height: 3px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--red), var(--orange)); transition: width 0.4s ease; min-width: 2px; }
+.prog-fill.indeterminate { animation: slide 1.4s ease infinite; width: 40% !important; }
+@keyframes slide { 0% { margin-left: -40%; } 100% { margin-left: 140%; } }
 
 .dl-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.6rem;
-  padding: 0.5rem 1.1rem;
-  background: rgba(0,230,118,0.1);
-  border: 1px solid rgba(0,230,118,0.3);
-  border-radius: 8px;
-  color: var(--green);
-  text-decoration: none;
-  font-size: 0.75rem;
-  letter-spacing: 1px;
-  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.6rem;
+  padding: 0.5rem 1.1rem; background: rgba(0,230,118,0.1);
+  border: 1px solid rgba(0,230,118,0.3); border-radius: 8px; color: var(--green);
+  text-decoration: none; font-size: 0.75rem; letter-spacing: 1px; transition: all 0.2s;
 }
 .dl-link:hover { background: rgba(0,230,118,0.18); }
+.job-error { font-size: 0.75rem; color: var(--red); margin-top: 0.4rem; }
 
-.job-error {
-  font-size: 0.75rem;
-  color: var(--red);
-  margin-top: 0.4rem;
+/* ── History ── */
+#history-panel { display: none; }
+.history-card {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 0.75rem;
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
 }
-
-/* ── Supported sites ── */
-.sites-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.4rem;
-  margin-top: 2.5rem;
+.history-info { flex: 1; overflow: hidden; }
+.history-title { font-size: 0.82rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.25rem; }
+.history-meta { font-size: 0.68rem; color: var(--muted); letter-spacing: 1px; }
+.history-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+.history-dl {
+  padding: 0.35rem 0.8rem; background: rgba(0,230,118,0.1);
+  border: 1px solid rgba(0,230,118,0.3); border-radius: 8px;
+  color: var(--green); text-decoration: none; font-size: 0.7rem; letter-spacing: 1px;
+  transition: all 0.2s; cursor: pointer;
 }
-
-.site-chip {
-  padding: 0.3rem 0.7rem;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-size: 0.7rem;
-  letter-spacing: 0.5px;
+.history-dl:hover { background: rgba(0,230,118,0.2); }
+.history-del {
+  padding: 0.35rem 0.8rem; background: rgba(255,45,85,0.1);
+  border: 1px solid rgba(255,45,85,0.3); border-radius: 8px;
+  color: var(--red); font-size: 0.7rem; letter-spacing: 1px;
+  cursor: pointer; transition: all 0.2s;
 }
+.history-del:hover { background: rgba(255,45,85,0.2); }
+.history-empty { text-align: center; color: var(--muted); font-size: 0.82rem; padding: 2rem; }
 
-/* ── Responsive ── */
+/* ── Admin Panel ── */
+#admin-panel { display: none; }
+.admin-panel-card {
+  background: var(--card2); border: 1px solid rgba(255,107,43,0.3);
+  border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;
+}
+.admin-panel-title { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); margin-bottom: 0.75rem; }
+.admin-desc { font-size: 0.78rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.6; }
+.upload-area {
+  border: 1.5px dashed var(--border2); border-radius: 12px; padding: 1.5rem;
+  text-align: center; cursor: pointer; transition: all 0.2s;
+}
+.upload-area:hover { border-color: var(--orange); }
+.upload-area input { display: none; }
+.upload-label { font-size: 0.82rem; color: var(--muted); cursor: pointer; }
+.upload-label span { color: var(--orange); }
+.upload-submit {
+  width: 100%; margin-top: 0.75rem; padding: 0.75rem;
+  background: linear-gradient(135deg, var(--orange), var(--red));
+  border: none; border-radius: 10px; color: white;
+  font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 2px; cursor: pointer; transition: opacity 0.2s;
+}
+.upload-submit:hover { opacity: 0.85; }
+.upload-msg { margin-top: 0.75rem; font-size: 0.8rem; }
+.upload-msg.ok { color: var(--green); }
+.upload-msg.err { color: var(--red); }
+
+/* ── Sites ── */
+.sites-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin-top: 2.5rem; }
+.site-chip { padding: 0.3rem 0.7rem; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); font-size: 0.7rem; letter-spacing: 0.5px; }
+
 @media (max-width: 500px) {
   nav { padding: 1rem 1.25rem; }
   .dl-card { padding: 1.25rem; }
@@ -490,7 +301,6 @@ nav {
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 
-<!-- Nav -->
 <nav>
   <div class="nav-logo">
     <svg height="36" viewBox="0 0 260 36" xmlns="http://www.w3.org/2000/svg">
@@ -500,19 +310,18 @@ nav {
           <stop offset="100%" style="stop-color:#ff6b2b"/>
         </linearGradient>
       </defs>
-      <!-- Hex icon -->
       <polygon points="14,4 24,4 30,14 24,24 14,24 8,14" fill="url(#ng)" opacity="0.15" stroke="url(#ng)" stroke-width="1"/>
       <polygon points="15,6 23,6 28,14 23,22 15,22 10,14" fill="url(#ng)"/>
       <line x1="19" y1="9" x2="19" y2="17" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
       <polyline points="15,14 19,18 23,14" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       <line x1="14" y1="19" x2="24" y2="19" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
-      <!-- Text -->
       <text x="36" y="12" font-family="'Syne',sans-serif" font-size="7.5" font-weight="700" fill="#ff2d55" letter-spacing="3" opacity="0.8">STATE OF</text>
       <text x="36" y="26" font-family="'Syne',sans-serif" font-size="13" font-weight="800" fill="url(#ng)" letter-spacing="1">TRANQUILITY</text>
     </svg>
   </div>
   <div class="nav-right">
     <span class="nav-user" id="nav-username"></span>
+    <button class="admin-btn" id="nav-admin-btn" onclick="toggleAdminPanel()" style="display:none">⚙ Admin</button>
     <button class="btn-sm" id="nav-auth-btn" onclick="showAuth()">Sign In</button>
     <button class="btn-sm" id="nav-logout-btn" onclick="doLogout()" style="display:none">Logout</button>
   </div>
@@ -523,7 +332,6 @@ nav {
   <!-- AUTH PAGE -->
   <div id="auth-page">
     <div class="auth-box">
-      <!-- Login Form -->
       <div id="login-form">
         <div class="auth-title">Welcome back.</div>
         <div class="auth-sub">Sign in to start downloading</div>
@@ -535,18 +343,17 @@ nav {
           <label>Password</label>
           <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
         </div>
-        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
-          <input type="checkbox" id="remember-me" style="accent-color:var(--red);width:15px;height:15px;cursor:pointer;"/>
-          <label for="remember-me" style="font-size:0.78rem;color:var(--muted);cursor:pointer;letter-spacing:1px;">Remember me for 30 days</label>
+        <div class="remember-row">
+          <input type="checkbox" id="remember-me"/>
+          <label for="remember-me">Remember me for 30 days</label>
         </div>
         <div class="auth-error" id="login-err"></div>
         <button class="auth-btn" onclick="doLogin()" id="login-btn">SIGN IN</button>
         <div class="auth-switch">Don't have an account? <a onclick="toggleAuth('register')">Create one</a></div>
       </div>
 
-      <!-- Register Form -->
       <div id="register-form" style="display:none">
-        <div class="auth-title">Join VidDrop.</div>
+        <div class="auth-title">Join us.</div>
         <div class="auth-sub">Create your free account</div>
         <div class="field">
           <label>Username</label>
@@ -570,32 +377,54 @@ nav {
   <!-- MAIN APP PAGE -->
   <div id="app-page" style="display:none">
     <div class="hero">
-      <div class="hero-title">
-        Download<br/><span class="grad">Anything.</span>
-      </div>
+      <div class="hero-title">Download<br/><span class="grad">Anything.</span></div>
       <div class="hero-sub">State of Tranquility · Paste links · Choose quality · Save instantly</div>
     </div>
 
-    <div class="dl-card">
-      <div class="section-label">Video URLs — paste one or multiple links</div>
-      <textarea id="url-input" placeholder="https://youtube.com/watch?v=...&#10;https://tiktok.com/@user/video/...&#10;https://instagram.com/reel/..."></textarea>
-
-      <div class="section-label">Quality</div>
-      <div class="quality-row">
-        <button class="q-pill active" data-q="best">Best</button>
-        <button class="q-pill" data-q="1080p">1080p</button>
-        <button class="q-pill" data-q="720p">720p</button>
-        <button class="q-pill" data-q="480p">480p</button>
-        <button class="q-pill" data-q="audio">Audio Only</button>
-      </div>
-
-      <button class="dl-btn" id="dl-btn" onclick="startDownload()">⬇ DOWNLOAD</button>
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('download')">⬇ Download</button>
+      <button class="tab" onclick="switchTab('history')" id="history-tab">🕒 History</button>
     </div>
 
-    <!-- Jobs -->
-    <div id="jobs-container"></div>
+    <!-- Admin Panel -->
+    <div id="admin-panel">
+      <div class="admin-panel-card">
+        <div class="admin-panel-title">⚙ Admin — Update YouTube Cookies</div>
+        <div class="admin-desc">Upload a fresh cookies.txt file exported from your browser to fix YouTube bot detection. Do this every 2-4 weeks to keep YouTube downloads working.</div>
+        <div class="upload-area" onclick="document.getElementById('cookies-file').click()">
+          <input type="file" id="cookies-file" accept=".txt" onchange="updateFileName()"/>
+          <div class="upload-label">Click to select <span>cookies.txt</span> file</div>
+          <div id="file-name" style="font-size:0.75rem;color:var(--text);margin-top:0.4rem;"></div>
+        </div>
+        <button class="upload-submit" onclick="uploadCookies()">⬆ UPDATE COOKIES</button>
+        <div class="upload-msg" id="upload-msg"></div>
+      </div>
+    </div>
 
-    <!-- Supported sites -->
+    <!-- Download Panel -->
+    <div id="download-panel">
+      <div class="dl-card">
+        <div class="section-label">Video URLs — paste one or multiple links</div>
+        <textarea id="url-input" placeholder="https://youtube.com/watch?v=...&#10;https://tiktok.com/@user/video/...&#10;https://instagram.com/reel/..."></textarea>
+        <div class="section-label">Quality</div>
+        <div class="quality-row">
+          <button class="q-pill active" data-q="best">Best</button>
+          <button class="q-pill" data-q="1080p">1080p</button>
+          <button class="q-pill" data-q="720p">720p</button>
+          <button class="q-pill" data-q="480p">480p</button>
+          <button class="q-pill" data-q="audio">Audio Only</button>
+        </div>
+        <button class="dl-btn" id="dl-btn" onclick="startDownload()">⬇ DOWNLOAD</button>
+      </div>
+      <div id="jobs-container"></div>
+    </div>
+
+    <!-- History Panel -->
+    <div id="history-panel">
+      <div id="history-list"></div>
+    </div>
+
     <div class="sites-row">
       <span class="site-chip">YouTube</span>
       <span class="site-chip">TikTok</span>
@@ -614,33 +443,35 @@ nav {
 </div>
 
 <script>
-// ── State ─────────────────────────────────────────────────────────────────────
 let selectedQuality = 'best';
 let activePolls = {};
+let currentTab = 'download';
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 (async () => {
   const res = await fetch('/api/me');
   const data = await res.json();
-  if (data.logged_in) showApp(data.username);
+  if (data.logged_in) showApp(data.username, data.is_admin);
   else showAuth();
 })();
 
-// ── Auth UI ───────────────────────────────────────────────────────────────────
+// ── Auth ──────────────────────────────────────────────────────────────────────
 function showAuth() {
   document.getElementById('auth-page').style.display = 'flex';
   document.getElementById('app-page').style.display = 'none';
   document.getElementById('nav-auth-btn').style.display = '';
   document.getElementById('nav-logout-btn').style.display = 'none';
+  document.getElementById('nav-admin-btn').style.display = 'none';
   document.getElementById('nav-username').textContent = '';
 }
 
-function showApp(username) {
+function showApp(username, isAdmin) {
   document.getElementById('auth-page').style.display = 'none';
   document.getElementById('app-page').style.display = 'block';
   document.getElementById('nav-auth-btn').style.display = 'none';
   document.getElementById('nav-logout-btn').style.display = '';
   document.getElementById('nav-username').textContent = username;
+  document.getElementById('nav-admin-btn').style.display = isAdmin ? '' : 'none';
 }
 
 function toggleAuth(mode) {
@@ -652,16 +483,14 @@ function toggleAuth(mode) {
 
 function showError(id, msg) {
   const el = document.getElementById(id);
-  el.textContent = msg;
-  el.style.display = 'block';
+  el.textContent = msg; el.style.display = 'block';
 }
 
 async function doLogin() {
   const btn = document.getElementById('login-btn');
   btn.disabled = true; btn.textContent = 'SIGNING IN...';
   const res = await fetch('/api/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       identifier: document.getElementById('login-id').value,
       password: document.getElementById('login-pass').value,
@@ -670,7 +499,7 @@ async function doLogin() {
   });
   const data = await res.json();
   btn.disabled = false; btn.textContent = 'SIGN IN';
-  if (res.ok) showApp(data.username);
+  if (res.ok) showApp(data.username, data.is_admin);
   else showError('login-err', data.error);
 }
 
@@ -678,8 +507,7 @@ async function doRegister() {
   const btn = document.getElementById('reg-btn');
   btn.disabled = true; btn.textContent = 'CREATING...';
   const res = await fetch('/api/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       username: document.getElementById('reg-username').value,
       email: document.getElementById('reg-email').value,
@@ -688,7 +516,7 @@ async function doRegister() {
   });
   const data = await res.json();
   btn.disabled = false; btn.textContent = 'CREATE ACCOUNT';
-  if (res.ok) showApp(data.username);
+  if (res.ok) showApp(data.username, data.is_admin);
   else showError('reg-err', data.error);
 }
 
@@ -696,9 +524,20 @@ async function doLogout() {
   await fetch('/api/logout', { method: 'POST' });
   showAuth();
   document.getElementById('jobs-container').innerHTML = '';
+  document.getElementById('history-list').innerHTML = '';
 }
 
-// ── Quality pills ─────────────────────────────────────────────────────────────
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('download-panel').style.display = tab === 'download' ? 'block' : 'none';
+  document.getElementById('history-panel').style.display = tab === 'history' ? 'block' : 'none';
+  if (tab === 'history') loadHistory();
+}
+
+// ── Quality ───────────────────────────────────────────────────────────────────
 document.querySelectorAll('.q-pill').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.q-pill').forEach(b => b.classList.remove('active'));
@@ -711,39 +550,27 @@ document.querySelectorAll('.q-pill').forEach(btn => {
 async function startDownload() {
   const raw = document.getElementById('url-input').value.trim();
   if (!raw) { alert('Paste at least one video URL!'); return; }
-
   const urls = raw.split('\n').map(u => u.trim()).filter(Boolean);
   const btn = document.getElementById('dl-btn');
   btn.disabled = true; btn.textContent = '⏳ STARTING...';
-
   try {
     const res = await fetch('/api/download', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ urls, quality: selectedQuality })
     });
     const data = await res.json();
     if (data.job_ids) {
       document.getElementById('url-input').value = '';
-      data.job_ids.forEach((id, i) => {
-        createJobCard(id, urls[i]);
-        pollJob(id);
-      });
-    } else {
-      alert(data.error || 'Something went wrong');
-    }
-  } catch(e) {
-    alert('Network error. Is the server running?');
-  }
+      data.job_ids.forEach((id, i) => { createJobCard(id, urls[i]); pollJob(id); });
+    } else { alert(data.error || 'Something went wrong'); }
+  } catch(e) { alert('Network error. Is the server running?'); }
   btn.disabled = false; btn.textContent = '⬇ DOWNLOAD';
 }
 
-// ── Job Card ──────────────────────────────────────────────────────────────────
 function createJobCard(jobId, url) {
   const container = document.getElementById('jobs-container');
   const card = document.createElement('div');
-  card.className = 'job-card';
-  card.id = `job-${jobId}`;
+  card.className = 'job-card'; card.id = `job-${jobId}`;
   card.innerHTML = `
     <div class="job-header">
       <div class="job-url">${url}</div>
@@ -756,12 +583,9 @@ function createJobCard(jobId, url) {
         <span id="eta-${jobId}"></span>
         <span id="pct-${jobId}">0%</span>
       </div>
-      <div class="prog-bar">
-        <div class="prog-fill indeterminate" id="fill-${jobId}" style="width:0%"></div>
-      </div>
+      <div class="prog-bar"><div class="prog-fill indeterminate" id="fill-${jobId}" style="width:0%"></div></div>
     </div>
-    <div id="action-${jobId}"></div>
-  `;
+    <div id="action-${jobId}"></div>`;
   container.prepend(card);
 }
 
@@ -772,10 +596,7 @@ function pollJob(jobId) {
       const res = await fetch(`/api/status/${jobId}`);
       const d = await res.json();
       updateJobCard(jobId, d);
-      if (d.status === 'done' || d.status === 'error') {
-        clearInterval(activePolls[jobId]);
-        delete activePolls[jobId];
-      }
+      if (d.status === 'done' || d.status === 'error') { clearInterval(activePolls[jobId]); delete activePolls[jobId]; }
     } catch(e) {}
   }, 1000);
 }
@@ -788,33 +609,72 @@ function updateJobCard(jobId, d) {
   const eta   = document.getElementById(`eta-${jobId}`);
   const title = document.getElementById(`title-${jobId}`);
   const action= document.getElementById(`action-${jobId}`);
-
   if (d.status === 'downloading') {
     badge.className = 'job-badge badge-downloading'; badge.textContent = 'DOWNLOADING';
-    fill.classList.remove('indeterminate');
-    fill.style.width = (d.percent || 0) + '%';
-    pct.textContent = (d.percent || 0) + '%';
-    speed.textContent = d.speed || '';
-    eta.textContent = d.eta ? `ETA ${d.eta}` : '';
-
+    fill.classList.remove('indeterminate'); fill.style.width = (d.percent || 0) + '%';
+    pct.textContent = (d.percent || 0) + '%'; speed.textContent = d.speed || ''; eta.textContent = d.eta ? `ETA ${d.eta}` : '';
   } else if (d.status === 'done') {
     badge.className = 'job-badge badge-done'; badge.textContent = 'DONE';
-    fill.classList.remove('indeterminate');
-    fill.style.width = '100%';
-    pct.textContent = '100%';
-    speed.textContent = ''; eta.textContent = '';
-    title.textContent = d.title || 'Video ready';
+    fill.classList.remove('indeterminate'); fill.style.width = '100%'; pct.textContent = '100%';
+    speed.textContent = ''; eta.textContent = ''; title.textContent = d.title || 'Video ready';
     action.innerHTML = `<a class="dl-link" href="/api/file/${jobId}" download="${d.filename}">⬇ Save — ${d.filename}</a>`;
-
   } else if (d.status === 'error') {
     badge.className = 'job-badge badge-error'; badge.textContent = 'ERROR';
-    fill.classList.remove('indeterminate');
-    fill.style.width = '0%';
+    fill.classList.remove('indeterminate'); fill.style.width = '0%';
     action.innerHTML = `<div class="job-error">✗ ${d.message}</div>`;
-
-  } else if (d.status === 'queued') {
-    badge.className = 'job-badge badge-queued'; badge.textContent = 'QUEUED';
   }
+}
+
+// ── History ───────────────────────────────────────────────────────────────────
+async function loadHistory() {
+  const list = document.getElementById('history-list');
+  list.innerHTML = '<div class="history-empty">Loading...</div>';
+  try {
+    const res = await fetch('/api/history');
+    const data = await res.json();
+    if (!data.length) { list.innerHTML = '<div class="history-empty">No downloads yet. Start downloading!</div>'; return; }
+    list.innerHTML = data.map(r => `
+      <div class="history-card" id="hist-${r.id}">
+        <div class="history-info">
+          <div class="history-title">${r.title}</div>
+          <div class="history-meta">${r.quality.toUpperCase()} · ${r.downloaded_at}</div>
+        </div>
+        <div class="history-actions">
+          <a class="history-dl" href="${r.url}" target="_blank">↗ Source</a>
+          <button class="history-del" onclick="deleteHistory(${r.id})">✕</button>
+        </div>
+      </div>`).join('');
+  } catch(e) { list.innerHTML = '<div class="history-empty">Failed to load history.</div>'; }
+}
+
+async function deleteHistory(id) {
+  await fetch(`/api/history/${id}`, { method: 'DELETE' });
+  document.getElementById(`hist-${id}`)?.remove();
+}
+
+// ── Admin ─────────────────────────────────────────────────────────────────────
+function toggleAdminPanel() {
+  const panel = document.getElementById('admin-panel');
+  panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+}
+
+function updateFileName() {
+  const file = document.getElementById('cookies-file').files[0];
+  document.getElementById('file-name').textContent = file ? file.name : '';
+}
+
+async function uploadCookies() {
+  const file = document.getElementById('cookies-file').files[0];
+  const msg = document.getElementById('upload-msg');
+  if (!file) { msg.textContent = 'Please select a cookies.txt file first!'; msg.className = 'upload-msg err'; return; }
+  const formData = new FormData();
+  formData.append('cookies', file);
+  try {
+    const res = await fetch('/api/admin/update-cookies', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (res.ok) { msg.textContent = '✓ ' + data.message; msg.className = 'upload-msg ok'; }
+    else { msg.textContent = '✗ ' + data.error; msg.className = 'upload-msg err'; }
+  } catch(e) { msg.textContent = '✗ Network error'; msg.className = 'upload-msg err'; }
 }
 </script>
 </body>
