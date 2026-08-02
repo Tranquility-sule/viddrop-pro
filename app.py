@@ -60,10 +60,10 @@ def cleanup_file(filepath, delay=600):
     threading.Thread(target=_delete, daemon=True).start()
 
 FORMAT_MAP = {
-    "best":  "best[ext=mp4]/best",
-    "1080p": "best[height<=1080][ext=mp4]/best[height<=1080]/best",
-    "720p":  "best[height<=720][ext=mp4]/best[height<=720]/best",
-    "480p":  "best[height<=480][ext=mp4]/best[height<=480]/best",
+    "best":  "bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio/best[ext=mp4]/best",
+    "1080p": "bestvideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/bestvideo[height<=1080]+bestaudio/best[height<=1080]",
+    "720p":  "bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/bestvideo[height<=720]+bestaudio/best[height<=720]",
+    "480p":  "bestvideo[height<=480][ext=mp4]+bestaudio[ext=m4a]/bestvideo[height<=480]+bestaudio/best[height<=480]",
     "audio": "bestaudio[ext=m4a]/bestaudio",
 }
 
@@ -84,6 +84,25 @@ def do_download(job_id, url, quality):
             eta_str = f"{int(eta)}s" if eta else ""
             jobs[job_id].update({"percent": percent, "speed": speed, "eta": eta_str})
 
+    # Find ffmpeg location
+    ffmpeg_locations = [
+        r"C:\ffmpeg-8.1.1-essentials_build\bin",
+        r"C:\ffmpeg\bin",
+        "/usr/bin",
+        "/usr/local/bin",
+        "/nix/store",
+    ]
+    ffmpeg_loc = None
+    for loc in ffmpeg_locations:
+        if os.path.exists(loc):
+            ffmpeg_loc = loc
+            break
+    
+    # Also check PATH
+    import shutil
+    if not ffmpeg_loc and shutil.which("ffmpeg"):
+        ffmpeg_loc = os.path.dirname(shutil.which("ffmpeg"))
+
     ydl_opts = {
         "format": FORMAT_MAP.get(quality, FORMAT_MAP["best"]),
         "outtmpl": output_path,
@@ -95,6 +114,7 @@ def do_download(job_id, url, quality):
         "fragment_retries": 10,
         "socket_timeout": 30,
         "cookiefile": cookies_file if os.path.exists(cookies_file) else None,
+        "ffmpeg_location": ffmpeg_loc,
     }
 
     try:
